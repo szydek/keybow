@@ -6,7 +6,7 @@
 # copy to code.py to run
 # this version also allows for different color feedback on keys second column from the right (C0, C#0, D0, D#0)
 # buttons 0 + 4 are record, play respectively
-# with cc options
+# with different colors for the keypad
 
 
 import time
@@ -32,6 +32,8 @@ midi = adafruit_midi.MIDI(midi_in=usb_midi.ports[0], midi_out=usb_midi.ports[1],
 rgb = (0, 255, 50)
 rec_rgb = (255, 0, 0)
 play_rgb = (0, 255, 0)
+tap_rgb = (200, 200, 0)  # color for 9 keypad presses
+ctl_rgb = (255,165,0) # will be color for future control button
 feedback_rgb = (0, 0, 255)  # Different color for feedback (e.g., blue)
 
 # MIDI note and velocity settings
@@ -90,8 +92,28 @@ def midi_feedback():
                     if vel > 0:
                         if key_index == 0:
                             keys[key_index].set_led(*rec_rgb)
+                        elif key_index == 1:
+                            keys[key_index].set_led(*tap_rgb)
+                        elif key_index == 2:
+                            keys[key_index].set_led(*tap_rgb)
+                        elif key_index == 3:
+                            keys[key_index].set_led(*tap_rgb)
                         elif key_index == 4:
                             keys[key_index].set_led(*play_rgb)
+                        elif key_index == 5:
+                            keys[key_index].set_led(*tap_rgb)
+                        elif key_index == 6:
+                            keys[key_index].set_led(*tap_rgb)
+                        elif key_index == 7:
+                            keys[key_index].set_led(*tap_rgb)
+                        elif key_index == 8:
+                            keys[key_index].set_led(*ctl_rgb)
+                        elif key_index == 9:
+                            keys[key_index].set_led(*tap_rgb)
+                        elif key_index == 10:
+                            keys[key_index].set_led(*tap_rgb)
+                        elif key_index == 11:
+                            keys[key_index].set_led(*tap_rgb)
                         else:
                             keys[key_index].set_led(*rgb)
                         key_led_states[key_index] = True
