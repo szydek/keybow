@@ -1,5 +1,6 @@
 # Keybow 2040 MIDI controller with LED feedback from Ableton
 # copy to code.py to run
+# this version also allows for different color feedback on keys second column from the right (C0, C#0, D0, D#0)
 
 import time
 import board
@@ -20,9 +21,10 @@ midi = adafruit_midi.MIDI(midi_in=usb_midi.ports[0], midi_out=usb_midi.ports[1],
 
 # LED color when button is ON
 rgb = (0, 255, 50)
+feedback_rgb = (0, 0, 255)  # Different color for feedback (e.g., blue)
 
 # MIDI note and velocity settings
-start_note = 36  # Starting MIDI note
+start_note = 36  # Starting MIDI note for Keybow (C0)
 velocity = 127   # Note on velocity
 
 # Track LED states for each key
@@ -50,21 +52,52 @@ def midi_feedback():
         if isinstance(msg, NoteOn):
             note = msg.note
             vel = msg.velocity
-            key_index = note - start_note
-            if 0 <= key_index < len(keys):
+            if note == 24:  # Check for C0 (note 24)
                 if vel > 0:
-                    keys[key_index].set_led(*rgb)
-                    key_led_states[key_index] = True
+                    keys[11].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
                 else:
-                    keys[key_index].set_led(0, 0, 0)
-                    key_led_states[key_index] = False
+                    keys[11].set_led(0, 0, 0)  # Turn off key 11 LED
+            if note == 25:  # C#0
+                if vel > 0:
+                    keys[10].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
+                else:
+                    keys[10].set_led(0, 0, 0)  # Turn off key 11 LED
+            if note == 26:  # D0
+                if vel > 0:
+                    keys[9].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
+                else:
+                    keys[9].set_led(0, 0, 0)  # Turn off key 11 LED
+            if note == 27:  # D#0
+                if vel > 0:
+                    keys[8].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
+                else:
+                    keys[8].set_led(0, 0, 0)  # Turn off key 11 LED
+            else:
+                # Handle other NoteOn messages normally for mapping
+                key_index = note - start_note
+                if 0 <= key_index < len(keys):
+                    if vel > 0:
+                        keys[key_index].set_led(*rgb)
+                        key_led_states[key_index] = True
+                    else:
+                        keys[key_index].set_led(0, 0, 0)
+                        key_led_states[key_index] = False
 
         elif isinstance(msg, NoteOff):
             note = msg.note
-            key_index = note - start_note
-            if 0 <= key_index < len(keys):
-                keys[key_index].set_led(0, 0, 0)
-                key_led_states[key_index] = False
+            if note == 24:  # If it's C0 (note 24), turn off key 11's LED
+                keys[11].set_led(0, 0, 0)
+            if note == 25:  # C#0
+                keys[10].set_led(0, 0, 0)
+            if note == 26:  # D0
+                keys[9].set_led(0, 0, 0)
+            if note == 27:  # D#0
+                keys[8].set_led(0, 0, 0)
+            else:
+                key_index = note - start_note
+                if 0 <= key_index < len(keys):
+                    keys[key_index].set_led(0, 0, 0)
+                    key_led_states[key_index] = False
 
 # Main loop
 while True:
