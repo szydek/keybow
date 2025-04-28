@@ -2,6 +2,12 @@
 # copy to code.py to run
 # this version also allows for different color feedback on keys second column from the right (C0, C#0, D0, D#0)
 
+# Keybow 2040 MIDI controller with LED feedback from Ableton
+# copy to code.py to run
+# this version also allows for different color feedback on keys second column from the right (C0, C#0, D0, D#0)
+# buttons 0 + 4 are record, play respectively
+
+
 import time
 import board
 from keybow2040 import Keybow2040
@@ -21,6 +27,8 @@ midi = adafruit_midi.MIDI(midi_in=usb_midi.ports[0], midi_out=usb_midi.ports[1],
 
 # LED color when button is ON
 rgb = (0, 255, 50)
+rec_rgb = (255, 0, 0)
+play_rgb = (0, 255, 0)
 feedback_rgb = (0, 0, 255)  # Different color for feedback (e.g., blue)
 
 # MIDI note and velocity settings
@@ -77,7 +85,12 @@ def midi_feedback():
                 key_index = note - start_note
                 if 0 <= key_index < len(keys):
                     if vel > 0:
-                        keys[key_index].set_led(*rgb)
+                        if key_index == 0:
+                            keys[key_index].set_led(*rec_rgb)
+                        elif key_index == 4:
+                            keys[key_index].set_led(*play_rgb)
+                        else:
+                            keys[key_index].set_led(*rgb)
                         key_led_states[key_index] = True
                     else:
                         keys[key_index].set_led(0, 0, 0)
