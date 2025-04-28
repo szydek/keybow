@@ -6,6 +6,7 @@
 # copy to code.py to run
 # this version also allows for different color feedback on keys second column from the right (C0, C#0, D0, D#0)
 # buttons 0 + 4 are record, play respectively
+# with cc options
 
 
 import time
@@ -16,6 +17,8 @@ import usb_midi
 import adafruit_midi
 from adafruit_midi.note_off import NoteOff
 from adafruit_midi.note_on import NoteOn
+from adafruit_midi.control_change import ControlChange  # Add this import for CC messages
+
 
 # Setup Keybow
 i2c = board.I2C()
@@ -65,21 +68,21 @@ def midi_feedback():
                     keys[11].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
                 else:
                     keys[11].set_led(0, 0, 0)  # Turn off key 11 LED
-            if note == 25:  # C#0
+            elif note == 25:  # C#0
                 if vel > 0:
-                    keys[10].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
+                    keys[10].set_led(*feedback_rgb)
                 else:
-                    keys[10].set_led(0, 0, 0)  # Turn off key 11 LED
-            if note == 26:  # D0
+                    keys[10].set_led(0, 0, 0)
+            elif note == 26:  # D0
                 if vel > 0:
-                    keys[9].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
+                    keys[9].set_led(*feedback_rgb)
                 else:
-                    keys[9].set_led(0, 0, 0)  # Turn off key 11 LED
-            if note == 27:  # D#0
+                    keys[9].set_led(0, 0, 0)
+            elif note == 27:  # D#0
                 if vel > 0:
-                    keys[8].set_led(*feedback_rgb)  # Set key 11 (index 11) to a different color
+                    keys[8].set_led(*feedback_rgb)
                 else:
-                    keys[8].set_led(0, 0, 0)  # Turn off key 11 LED
+                    keys[8].set_led(0, 0, 0)
             else:
                 # Handle other NoteOn messages normally for mapping
                 key_index = note - start_note
@@ -100,11 +103,11 @@ def midi_feedback():
             note = msg.note
             if note == 24:  # If it's C0 (note 24), turn off key 11's LED
                 keys[11].set_led(0, 0, 0)
-            if note == 25:  # C#0
+            elif note == 25:  # C#0
                 keys[10].set_led(0, 0, 0)
-            if note == 26:  # D0
+            elif note == 26:  # D0
                 keys[9].set_led(0, 0, 0)
-            if note == 27:  # D#0
+            elif note == 27:  # D#0
                 keys[8].set_led(0, 0, 0)
             else:
                 key_index = note - start_note
@@ -112,8 +115,33 @@ def midi_feedback():
                     keys[key_index].set_led(0, 0, 0)
                     key_led_states[key_index] = False
 
+        elif isinstance(msg, ControlChange):  # Handle CC messages separately
+            cc_number = msg.control
+            cc_value = msg.value
+            # Use CC number to map to a key, or handle as desired
+            if cc_number == 1:  # Example CC number for a specific action
+                if cc_value == 0:  # Threshold example, adjust as needed
+                    keys[11].set_led(*feedback_rgb)  # Example: Light up key 11
+                elif cc_value == 4:
+                    keys[11].set_led(0, 0, 0)  # Turn off key 7
+                elif cc_value == 1:
+                    keys[10].set_led(*feedback_rgb)  # Turn off key 7
+                elif cc_value == 5:
+                    keys[10].set_led(0, 0, 0)  # Turn off key 7
+                elif cc_value == 2:
+                    keys[9].set_led(*feedback_rgb)  # Turn off key 7
+                elif cc_value == 6:
+                    keys[9].set_led(0, 0, 0)  # Turn off key 7
+                elif cc_value == 3:
+                    keys[8].set_led(*feedback_rgb)  # Turn off key 7
+                elif cc_value == 7:
+                    keys[8].set_led(0, 0, 0)  # Turn off key 7
+            # Add more CC conditions as needed
+
+
 # Main loop
 while True:
     keybow.update()
     midi_feedback()
     time.sleep(0.01)  # Tiny sleep for smoother operation
+    
