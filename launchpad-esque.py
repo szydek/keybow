@@ -1,10 +1,6 @@
 # Keybow 2040 MIDI controller with LED feedback from Ableton
 # copy to code.py to run
 # this version also allows for different color feedback on keys second column from the right (C0, C#0, D0, D#0)
-
-# Keybow 2040 MIDI controller with LED feedback from Ableton
-# copy to code.py to run
-# this version also allows for different color feedback on keys second column from the right (C0, C#0, D0, D#0)
 # buttons 0 + 4 are record, play respectively
 # with different colors for the keypad
 
