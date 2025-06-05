@@ -67,7 +67,7 @@ After plugging in the Keybow:
 3. Enable only the **MIDI Thru** option.
    - No other configuration is needed for basic use.
 
-4. Set **MIDI From** to the desired channel (e.g., MIDI Channel 2 for `CHANNEL = 1`) and set **Monitor** to **IN**.
+4. Set **MIDI From** to the desired MIDI track with clips you'd like to be managed by the KeyBow and set **Monitor** to **IN**.
 5. Use **MIDI Map Mode** in Ableton to map the **4 Keybow buttons** to the first 4 steps (mutes) in `KritoMML`.
 
 ### Optional: Global Mute Track
