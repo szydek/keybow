@@ -110,7 +110,7 @@ def midi_feedback():
                 if cc_value == 0:
                     set_keys([3, 2, 1], feedback_rgb)
                 elif cc_value == 4:
-                    clear_keys(remap[3], 2, 1])
+                    clear_keys([3, 2, 1])
                 elif cc_value == 1:
                     set_keys([7, 6, 5], feedback_rgb)
                 elif cc_value == 5:
