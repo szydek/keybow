@@ -16,6 +16,8 @@ from adafruit_midi.note_off import NoteOff
 from adafruit_midi.note_on import NoteOn
 from adafruit_midi.control_change import ControlChange  # Add this import for CC messages
 
+# CONFIG
+CHANNEL=2 # 0 = all, use distinct channels for multiple devices
 
 # Setup Keybow
 i2c = board.I2C()
@@ -23,7 +25,7 @@ keybow = Keybow2040(i2c)
 keys = keybow.keys
 
 # Setup USB MIDI
-midi = adafruit_midi.MIDI(midi_in=usb_midi.ports[0], midi_out=usb_midi.ports[1], out_channel=0)
+midi = adafruit_midi.MIDI(midi_in=usb_midi.ports[0], midi_out=usb_midi.ports[1], out_channel=CHANNEL, in_channel=CHANNEL)
 
 # LED color when button is ON
 rgb = (0, 255, 50)
